@@ -21,6 +21,12 @@ jobs:
       - run: npm install --no-package-lock
       - run: npm run build
       - run: npm test
+      - run: npm install --no-package-lock openai@latest
+      - run: node test/cjs-check.cjs
+      - run: cd test && node --import ../register.mjs esm-check.mjs
+        env:
+          OMNIA_API_KEY: ci
+          OMNIA_OTLP_ENDPOINT: http://127.0.0.1:9
 
   python-latest:
     runs-on: ubuntu-latest

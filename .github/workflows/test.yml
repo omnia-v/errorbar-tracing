@@ -21,6 +21,15 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      # Interception checks against a REAL installed openai: shimmer marks
+      # patched functions __wrapped. ESM runs through --import register —
+      # the path that silently no-ops when the instrumentation package is
+      # duplicated in the tree.
+      - run: node test/cjs-check.cjs
+      - run: cd test && node --import ../register.mjs esm-check.mjs
+        env:
+          OMNIA_API_KEY: ci
+          OMNIA_OTLP_ENDPOINT: http://127.0.0.1:9
 
   python:
     runs-on: ubuntu-latest

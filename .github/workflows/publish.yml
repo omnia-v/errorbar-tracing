@@ -1,0 +1,51 @@
+name: publish
+# Release = push a tag:  js-v0.1.0  publishes @omnia/tracing to npm,
+#                        py-v0.1.0  publishes omnia-tracing to PyPI.
+# npm needs the NPM_TOKEN secret (automation token for the @omnia scope);
+# PyPI uses trusted publishing (configure this repo as a publisher for the
+# omnia-tracing project on pypi.org — no token stored here).
+on:
+  push:
+    tags:
+      - "js-v*"
+      - "py-v*"
+
+jobs:
+  npm:
+    if: startsWith(github.ref_name, 'js-v')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  pypi:
+    if: startsWith(github.ref_name, 'py-v')
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    defaults:
+      run:
+        working-directory: packages/python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build && python -m build
+      - run: pip install -e . pytest && pytest tests/ -q
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: packages/python/dist

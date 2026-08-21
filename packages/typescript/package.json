@@ -1,5 +1,5 @@
 {
-  "name": "@omnia/tracing",
+  "name": "@omnia-voice/tracing",
   "version": "0.1.0",
   "description": "Omnia tracing \u2014 standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change.",
   "license": "Apache-2.0",

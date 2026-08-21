@@ -43,7 +43,7 @@ export function resolveConfig(
   const apiKey = opts.apiKey ?? env.OMNIA_API_KEY;
   if (!apiKey) {
     throw new Error(
-      "@omnia/tracing: no API key. Pass setup({ apiKey }) or set OMNIA_API_KEY. " +
+      "@omnia-voice/tracing: no API key. Pass setup({ apiKey }) or set OMNIA_API_KEY. " +
         "Refusing to start a tracer that exports nowhere.",
     );
   }

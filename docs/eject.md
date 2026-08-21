@@ -1,6 +1,6 @@
 # Ejecting — the same setup without this package
 
-`@omnia/tracing` / `omnia-tracing` is ~200 lines of configuration over standard
+`@omnia-voice/tracing` / `omnia-tracing` is ~200 lines of configuration over standard
 OpenTelemetry. If you'd rather own that configuration (or stop using the
 package for any reason), here is the identical setup in vanilla OTel. Your
 spans do not change — the package and this document produce the same wire

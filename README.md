@@ -7,11 +7,11 @@ This SDK contains **no instrumentation code of its own**. It pins and configures
 ## TypeScript
 
 ```bash
-npm install @omnia/tracing
+npm install @omnia-voice/tracing
 ```
 
 ```ts
-import { setup } from "@omnia/tracing";
+import { setup } from "@omnia-voice/tracing";
 
 setup(); // reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM clients
 ```
@@ -19,7 +19,7 @@ setup(); // reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM clien
 **Pure-ESM app?** Skip the code entirely and start Node with the loader hook — imports are intercepted before your app runs:
 
 ```bash
-node --import @omnia/tracing/register app.mjs
+node --import @omnia-voice/tracing/register app.mjs
 ```
 
 ## Python
@@ -59,7 +59,7 @@ Only libraries actually installed in your environment are instrumented (Python r
 **Verified end-to-end** (live drills 2026-08-21, every row confirmed gradeable in Omnia):
 
 - TypeScript CJS with `openai@4` **and** `openai@7` (upstream pins `<7`; this package carries a one-line range widening — v7 kept the exact class surface the patch wraps — removed once upstream catches up)
-- **Pure ESM** via `node --import @omnia/tracing/register` (Node 20–24)
+- **Pure ESM** via `node --import @omnia-voice/tracing/register` (Node 20–24)
 - **Streaming** completions (content aggregated across chunks)
 - **LangChain** (`@langchain/openai` chat model)
 - **Python** with `openai`

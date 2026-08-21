@@ -1,7 +1,7 @@
 /**
  * ESM auto-instrumentation entrypoint:
  *
- *   node --import @omnia/tracing/register app.mjs
+ *   node --import @omnia-voice/tracing/register app.mjs
  *
  * Pure-ESM apps import their LLM clients before any runtime call could patch
  * them, so interception has to happen at the module loader. This registers

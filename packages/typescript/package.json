@@ -1,7 +1,7 @@
 {
   "name": "@omnia/tracing",
   "version": "0.1.0",
-  "description": "Omnia tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change.",
+  "description": "Omnia tracing \u2014 standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -11,7 +11,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "register.mjs"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -23,7 +24,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/exporter-trace-otlp-proto": "^0.221.0",
-    "@opentelemetry/instrumentation": "^0.221.0",
+    "@opentelemetry/instrumentation": "^0.203.0",
     "@opentelemetry/sdk-node": "^0.221.0",
     "@traceloop/instrumentation-anthropic": "^0.27.0",
     "@traceloop/instrumentation-langchain": "^0.27.0",
@@ -32,5 +33,12 @@
   "devDependencies": {
     "typescript": "^5.6.0",
     "vitest": "^3.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./register": "./register.mjs"
   }
 }

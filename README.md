@@ -16,6 +16,12 @@ import { setup } from "@omnia/tracing";
 setup(); // reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM clients
 ```
 
+**Pure-ESM app?** Skip the code entirely and start Node with the loader hook — imports are intercepted before your app runs:
+
+```bash
+node --import @omnia/tracing/register app.mjs
+```
+
 ## Python
 
 ```bash
@@ -50,7 +56,15 @@ All options can also be passed to `setup()` directly; explicit options beat env 
 
 Only libraries actually installed in your environment are instrumented (Python reports the active set on `tracing.instrumented`).
 
-**Verified end-to-end** (live drills 2026-08-21): TypeScript with `openai@4` **and** `openai@7` → spans and model-call content landed in Omnia and were gradeable. The upstream instrumentation pins openai at `<7`; this package carries a one-line range widening (v7 kept the exact class surface the patch wraps — drill-proven), removed once upstream catches up. The weekly unpinned-upstream CI canary re-checks the assumption so the widening can't silently rot. Already emitting OpenTelemetry from a framework like the Vercel AI SDK? You don't need this package at all — point your existing exporter at the endpoint above with an `Authorization: Bearer` header and an `omnia.tag` resource attribute.
+**Verified end-to-end** (live drills 2026-08-21, every row confirmed gradeable in Omnia):
+
+- TypeScript CJS with `openai@4` **and** `openai@7` (upstream pins `<7`; this package carries a one-line range widening — v7 kept the exact class surface the patch wraps — removed once upstream catches up)
+- **Pure ESM** via `node --import @omnia/tracing/register` (Node 20–24)
+- **Streaming** completions (content aggregated across chunks)
+- **LangChain** (`@langchain/openai` chat model)
+- **Python** with `openai`
+
+Failed calls (auth errors, timeouts) are captured as ERROR spans and stored as trace structure — a fix this drill battery surfaced in the ingest itself. The weekly unpinned-upstream CI canary re-checks all of the above so nothing rots silently. Already emitting OpenTelemetry from a framework like the Vercel AI SDK? You don't need this package at all — point your existing exporter at the endpoint above with an `Authorization: Bearer` header and an `omnia.tag` resource attribute.
 
 ## Privacy
 

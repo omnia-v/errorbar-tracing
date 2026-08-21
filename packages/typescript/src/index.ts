@@ -1,10 +1,28 @@
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
-import type { Instrumentation } from "@opentelemetry/instrumentation";
+import type {
+  Instrumentation,
+  InstrumentationNodeModuleDefinition,
+} from "@opentelemetry/instrumentation";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { LangChainInstrumentation } from "@traceloop/instrumentation-langchain";
 import { resolveConfig, type SetupOptions, TAG_ATTRIBUTE } from "./config";
+
+/**
+ * Upstream pins openai support at ">=4 <7", but v7 kept the exact public
+ * class surface the patch wraps (Chat.Completions / Completions / Responses /
+ * Images — verified by live drill 2026-08-21, spans + content landed).
+ * Widen to <8 until upstream catches up; the weekly unpinned-upstream CI
+ * canary re-checks this assumption so the widening can't silently rot.
+ */
+export class OpenAIInstrumentationWide extends OpenAIInstrumentation {
+  protected override init(): InstrumentationNodeModuleDefinition {
+    const def = super.init() as InstrumentationNodeModuleDefinition;
+    if (def.name === "openai") def.supportedVersions = [">=4 <8"];
+    return def;
+  }
+}
 
 export { resolveConfig, DEFAULT_ENDPOINT, TAG_ATTRIBUTE } from "./config";
 export type { SetupOptions, ResolvedConfig } from "./config";
@@ -38,7 +56,7 @@ export function setup(
 ): Tracing {
   const config = resolveConfig(opts);
 
-  const openai = new OpenAIInstrumentation();
+  const openai = new OpenAIInstrumentationWide();
   const anthropic = new AnthropicInstrumentation();
   const langchain = new LangChainInstrumentation();
 

@@ -41,3 +41,16 @@ describe("resolveConfig", () => {
     expect(Object.keys(c.resourceAttributes)).toHaveLength(0);
   });
 });
+
+describe("OpenAIInstrumentationWide", () => {
+  it("widens upstream's openai pin to include v7 (live-drilled 2026-08-21)", async () => {
+    const { OpenAIInstrumentationWide } = await import("../src/index");
+    const inst = new OpenAIInstrumentationWide() as unknown as {
+      init(): { name: string; supportedVersions: string[] } | Array<{ name: string; supportedVersions: string[] }>;
+    };
+    const def = inst.init();
+    const defs = Array.isArray(def) ? def : [def];
+    const openai = defs.find((d) => d.name === "openai");
+    expect(openai?.supportedVersions).toEqual([">=4 <8"]);
+  });
+});

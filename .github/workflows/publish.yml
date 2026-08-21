@@ -35,6 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
+      # A job-level permissions block zeroes everything unlisted — without
+      # contents:read the checkout can't see its own repo ("not found").
+      contents: read
       id-token: write
     defaults:
       run:

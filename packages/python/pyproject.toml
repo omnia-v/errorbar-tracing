@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "omnia-tracing"
-version = "0.1.0"
+version = "0.1.1"
 description = "Omnia tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change."
 license = "Apache-2.0"
 readme = "README.md"
@@ -23,6 +23,12 @@ Repository = "https://github.com/omnia-v/omnia-tracing"
 
 [dependency-groups]
 dev = ["pytest>=8"]
+
+[tool.hatch.build.targets.sdist]
+# Explicit allowlist: hatchling's default packs the project DIR, which once
+# shipped a local .env inside a published sdist. Never again — list what
+# ships; everything else stays home.
+include = ["src/omnia_tracing", "tests", "README.md", "pyproject.toml"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/omnia_tracing"]

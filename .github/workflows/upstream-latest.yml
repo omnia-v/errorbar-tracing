@@ -1,0 +1,36 @@
+name: upstream-latest
+# Weekly canary against UNPINNED upstreams: catches OpenTelemetry or
+# instrumentation drift in our CI before it lands in a customer's traces.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  typescript-latest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-package-lock @opentelemetry/sdk-node@latest @opentelemetry/exporter-trace-otlp-proto@latest @opentelemetry/instrumentation@latest @traceloop/instrumentation-openai@latest @traceloop/instrumentation-anthropic@latest @traceloop/instrumentation-langchain@latest
+      - run: npm install --no-package-lock
+      - run: npm run build
+      - run: npm test
+
+  python-latest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e . pytest --upgrade --upgrade-strategy eager
+      - run: pytest tests/ -q

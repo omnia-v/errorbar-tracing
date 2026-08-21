@@ -48,7 +48,9 @@ All options can also be passed to `setup()` directly; explicit options beat env 
 | Gemini | — (planned) | ✅ |
 | LangChain | ✅ | ✅ |
 
-Only libraries actually installed in your environment are instrumented (Python reports the active set on `tracing.instrumented`). Already emitting OpenTelemetry from a framework like the Vercel AI SDK? You don't need this package at all — point your existing exporter at the endpoint above with an `Authorization: Bearer` header and an `omnia.tag` resource attribute.
+Only libraries actually installed in your environment are instrumented (Python reports the active set on `tracing.instrumented`).
+
+**Verified end-to-end** (live drill 2026-08-21): TypeScript + `openai@4` → spans and model-call content landed in Omnia and were gradeable. **Known gap:** `openai@7` is not yet captured by the upstream instrumentation — calls succeed but emit no spans. Until upstream support lands, pin `openai@^4` for capture or route through the [Omnia gateway](https://platform.omnia-voice.com) (which needs no instrumentation at all). The weekly CI canary tracks upstream so this note stays honest. Already emitting OpenTelemetry from a framework like the Vercel AI SDK? You don't need this package at all — point your existing exporter at the endpoint above with an `Authorization: Bearer` header and an `omnia.tag` resource attribute.
 
 ## Privacy
 

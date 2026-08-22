@@ -26,7 +26,7 @@ Pure-ESM app? Skip the code entirely — start Node with the loader hook so impo
 node --import @omnia-voice/tracing/register app.mjs
 ```
 
-Short-lived scripts should `await tracing.shutdown()` before exit to flush pending spans; long-running servers can skip it.
+Short-lived scripts should `await tracing.shutdown()` before exit to flush pending spans; long-running servers can skip it. The `register` entrypoint flushes automatically when the process exits normally — no code needed.
 
 ## What gets captured
 

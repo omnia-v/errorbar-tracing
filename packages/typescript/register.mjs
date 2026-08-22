@@ -27,4 +27,18 @@ const hookPath = require.resolve("@opentelemetry/instrumentation/hook.mjs", {
 register(pathToFileURL(hookPath).href, import.meta.url);
 
 const { setup } = require("./dist/index.js");
-setup();
+const tracing = setup();
+
+// This entrypoint keeps the only shutdown handle, so it owns the flush: the
+// batch exporter holds spans up to 5s, and a short-lived script exits before
+// that timer ever fires — dropping its spans silently (drilled 2026-08-22).
+// beforeExit fires when the event loop drains; the async flush schedules
+// work, which keeps the process alive until the export completes. Does not
+// fire on process.exit() or fatal signals — servers killed by SIGTERM lose
+// at most the final 5s window, same as any OTel batch exporter.
+let flushed = false;
+process.once("beforeExit", () => {
+  if (flushed) return;
+  flushed = true;
+  tracing.shutdown().catch(() => {});
+});

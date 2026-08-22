@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "omnia-tracing"
-version = "0.1.1"
+version = "0.1.2"
 description = "Omnia tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change."
 license = "Apache-2.0"
 readme = "README.md"

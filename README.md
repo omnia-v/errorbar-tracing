@@ -51,7 +51,7 @@ All options can also be passed to `setup()` directly; explicit options beat env 
 | --- | --- | --- |
 | OpenAI | ✅ | ✅ |
 | Anthropic | ✅ | ✅ |
-| Gemini | — (planned) | ✅ |
+| Gemini | ✅ (Vertex AI SDK) | ✅ |
 | LangChain | ✅ | ✅ |
 
 Only libraries actually installed in your environment are instrumented (Python reports the active set on `tracing.instrumented`).

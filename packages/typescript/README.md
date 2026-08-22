@@ -30,7 +30,7 @@ Short-lived scripts should `await tracing.shutdown()` before exit to flush pendi
 
 ## What gets captured
 
-OpenAI (v4–v7), Anthropic, and LangChain calls — automatically, and only for libraries actually installed. Successful calls, **streamed** calls (content aggregated across chunks), and **failed** calls (stored as ERROR trace structure — the most valuable signal there is, and the one status-code dashboards can't see).
+OpenAI (v4–v7), Anthropic, LangChain, and Gemini (via the Vertex AI SDK) calls — automatically, and only for libraries actually installed. Successful calls, **streamed** calls (content aggregated across chunks), and **failed** calls (stored as ERROR trace structure — the most valuable signal there is, and the one status-code dashboards can't see).
 
 Your inference does **not** move: requests keep going to your current provider; only trace telemetry flows to Omnia.
 

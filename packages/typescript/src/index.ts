@@ -7,6 +7,7 @@ import type {
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { LangChainInstrumentation } from "@traceloop/instrumentation-langchain";
+import { VertexAIInstrumentation } from "@traceloop/instrumentation-vertexai";
 import { resolveConfig, type SetupOptions, TAG_ATTRIBUTE } from "./config";
 
 /**
@@ -38,6 +39,8 @@ export interface Tracing {
     openai: OpenAIInstrumentation;
     anthropic: AnthropicInstrumentation;
     langchain: LangChainInstrumentation;
+    /** Gemini via the Vertex AI SDK (@google-cloud/vertexai). */
+    vertexai: VertexAIInstrumentation;
   };
 }
 
@@ -59,6 +62,7 @@ export function setup(
   const openai = new OpenAIInstrumentationWide();
   const anthropic = new AnthropicInstrumentation();
   const langchain = new LangChainInstrumentation();
+  const vertexai = new VertexAIInstrumentation();
 
   // The population tag rides the standard resource-attributes env var so the
   // resource pipeline stays 100% stock OTel (no Resource construction here —
@@ -82,6 +86,7 @@ export function setup(
       openai,
       anthropic,
       langchain,
+      vertexai,
       ...(opts.instrumentations ?? []),
     ],
   });
@@ -89,6 +94,6 @@ export function setup(
 
   return {
     shutdown: () => sdk.shutdown(),
-    instrumentations: { openai, anthropic, langchain },
+    instrumentations: { openai, anthropic, langchain, vertexai },
   };
 }

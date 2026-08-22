@@ -1,7 +1,7 @@
 name: publish
-# Release = push a tag:  js-v0.1.0  publishes @omnia/tracing to npm,
+# Release = push a tag:  js-v0.1.0  publishes @omnia-voice/tracing to npm,
 #                        py-v0.1.0  publishes omnia-tracing to PyPI.
-# npm needs the NPM_TOKEN secret (automation token for the @omnia scope);
+# npm needs the NPM_TOKEN secret (granular token for the @omnia-voice scope);
 # PyPI uses trusted publishing (configure this repo as a publisher for the
 # omnia-tracing project on pypi.org — no token stored here).
 on:
@@ -14,6 +14,10 @@ jobs:
   npm:
     if: startsWith(github.ref_name, 'js-v')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # --provenance signs the build against the workflow's OIDC identity.
+      id-token: write
     defaults:
       run:
         working-directory: packages/typescript

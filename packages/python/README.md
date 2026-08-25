@@ -1,6 +1,6 @@
 # omnia-tracing
 
-**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [Omnia](https://platform.omnia-voice.com) — where you grade it, calibrate a judge against your own standards, and find out **with confidence intervals** whether a cheaper model holds up on your production traffic.
+**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you grade it, calibrate a judge against your own standards, and find out **with confidence intervals** whether a cheaper model holds up on your production traffic.
 
 This package contains **no instrumentation code of its own**. It pins and configures the ecosystem's standard OpenTelemetry instrumentations — which gives it a property no other tracing SDK offers: **you can uninstall it without losing your instrumentation.** The identical setup in vanilla OTel is documented below; your spans are byte-for-byte the same either way, and nothing proprietary ever goes on the wire.
 
@@ -27,14 +27,14 @@ Short-lived scripts should call `tracing.shutdown()` before exit to flush pendin
 
 OpenAI, Anthropic, Gemini, and LangChain calls — automatically, and **only for libraries actually installed** (the `instrumented` list tells you exactly which). Successful calls, streamed calls, and **failed** calls (stored as ERROR trace structure — the most valuable signal there is, and the one status-code dashboards can't see).
 
-Your inference does **not** move: requests keep going to your current provider; only trace telemetry flows to Omnia.
+Your inference does **not** move: requests keep going to your current provider; only trace telemetry flows to errorbar.
 
 ## Configuration
 
 | Env var | Meaning | Default |
 | --- | --- | --- |
-| `OMNIA_API_KEY` | Omnia API key — **required**; `setup()` raises rather than exporting nowhere silently | — |
-| `OMNIA_TAG` | Population tag: one tag = one evaluation population in Omnia | unset |
+| `OMNIA_API_KEY` | errorbar API key — **required**; `setup()` raises rather than exporting nowhere silently | — |
+| `OMNIA_TAG` | Population tag: one tag = one evaluation population in errorbar | unset |
 | `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.omnia-voice.com/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
@@ -67,11 +67,11 @@ AnthropicInstrumentor().instrument(tracer_provider=provider)
 # ...and the other instrumentors for whichever libraries you use
 ```
 
-Already emitting OpenTelemetry (Pydantic AI, an existing OTel setup)? You don't need this package at all — three env vars point your existing exporter at Omnia. See the [OTLP ingest reference](https://docs.omnia-voice.com/reference/otlp-ingest).
+Already emitting OpenTelemetry (Pydantic AI, an existing OTel setup)? You don't need this package at all — three env vars point your existing exporter at errorbar. See the [OTLP ingest reference](https://docs.omnia-voice.com/reference/otlp-ingest).
 
 ## Privacy
 
-Span **structure** is always stored. Model-call **content** (prompts/completions) is stored only if your Omnia workspace has request logging enabled, under your retention window, with the same scrubbing and size caps as gateway traffic.
+Span **structure** is always stored. Model-call **content** (prompts/completions) is stored only if your errorbar workspace has request logging enabled, under your retention window, with the same scrubbing and size caps as gateway traffic.
 
 ## Verify your setup — get a receipt, not a hope
 

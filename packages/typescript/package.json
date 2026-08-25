@@ -1,7 +1,7 @@
 {
   "name": "@omnia-voice/tracing",
   "version": "0.1.3",
-  "description": "Omnia tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change.",
+  "description": "errorbar tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

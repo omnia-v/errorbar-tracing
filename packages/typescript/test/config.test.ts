@@ -8,7 +8,7 @@ describe("resolveConfig", () => {
     expect(() => resolveConfig({}, ENV)).toThrow(/OMNIA_API_KEY/);
   });
 
-  it("defaults to the Omnia gateway endpoint with a bearer header", () => {
+  it("defaults to the errorbar gateway endpoint with a bearer header", () => {
     const c = resolveConfig({ apiKey: "sk_x" }, ENV);
     expect(c.endpoint).toBe(DEFAULT_ENDPOINT);
     expect(c.headers.Authorization).toBe("Bearer sk_x");

@@ -45,7 +45,7 @@ export interface Tracing {
 }
 
 /**
- * Start standard OpenTelemetry tracing, exporting to Omnia.
+ * Start standard OpenTelemetry tracing, exporting to errorbar.
  *
  * Call ONCE, before constructing any LLM client (the instrumentations patch
  * module loading, so clients created earlier are not captured — use

@@ -21,7 +21,7 @@ import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { LangChainInstrumentation } from "@traceloop/instrumentation-langchain";
 
-// omnia.tag names your traffic population in Omnia
+// omnia.tag names your traffic population in errorbar
 process.env.OTEL_RESOURCE_ATTRIBUTES = "omnia.tag=my-agent";
 
 const sdk = new NodeSDK({

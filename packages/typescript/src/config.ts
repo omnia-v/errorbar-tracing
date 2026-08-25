@@ -10,11 +10,11 @@
 
 export const DEFAULT_ENDPOINT = "https://gateway.omnia-voice.com/v1/traces";
 
-/** Resource attribute that names the traffic population in Omnia. */
+/** Resource attribute that names the traffic population in errorbar. */
 export const TAG_ATTRIBUTE = "omnia.tag";
 
 export interface SetupOptions {
-  /** Omnia API key. Default: OMNIA_API_KEY env var. Required — setup throws
+  /** errorbar API key. Default: OMNIA_API_KEY env var. Required — setup throws
    *  rather than exporting nowhere silently. */
   apiKey?: string;
   /** Population tag (becomes the `omnia.tag` resource attribute — one tag =
@@ -23,7 +23,7 @@ export interface SetupOptions {
   /** Service name on the resource. Default: OTEL_SERVICE_NAME env var. */
   serviceName?: string;
   /** OTLP/HTTP traces endpoint. Default: OMNIA_OTLP_ENDPOINT env var, else
-   *  the Omnia gateway. Point it elsewhere and this package exports to any
+   *  the errorbar gateway. Point it elsewhere and this package exports to any
    *  OTLP receiver — there is nothing Omnia-specific on the wire. */
   endpoint?: string;
 }

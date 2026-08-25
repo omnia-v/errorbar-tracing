@@ -1,6 +1,6 @@
 # omnia-tracing
 
-**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [Omnia](https://platform.omnia-voice.com) — where you can grade it, calibrate a judge on your own standards, and find out with confidence intervals whether a cheaper model passes them.
+**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you can grade it, calibrate a judge on your own standards, and find out with confidence intervals whether a cheaper model passes them.
 
 This SDK contains **no instrumentation code of its own**. It pins and configures the ecosystem's standard OpenTelemetry instrumentations. That has a consequence no other tracing SDK offers: **you can uninstall it without losing your instrumentation** — the same setup in vanilla OTel is documented in [docs/eject.md](docs/eject.md), and your spans are identical either way. Nothing Omnia-specific ever goes on the wire.
 
@@ -38,8 +38,8 @@ setup()  # reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM client
 
 | Env var | Meaning | Default |
 | --- | --- | --- |
-| `OMNIA_API_KEY` | Omnia API key (required — setup refuses to start without one) | — |
-| `OMNIA_TAG` | Population tag: one tag = one gradeable population in Omnia | unset |
+| `OMNIA_API_KEY` | errorbar API key (required — setup refuses to start without one) | — |
+| `OMNIA_TAG` | Population tag: one tag = one gradeable population in errorbar | unset |
 | `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.omnia-voice.com/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
@@ -56,7 +56,7 @@ All options can also be passed to `setup()` directly; explicit options beat env 
 
 Only libraries actually installed in your environment are instrumented (Python reports the active set on `tracing.instrumented`).
 
-**Verified end-to-end** (live drills 2026-08-21, every row confirmed gradeable in Omnia):
+**Verified end-to-end** (live drills 2026-08-21, every row confirmed gradeable in errorbar):
 
 - TypeScript CJS with `openai@4` **and** `openai@7` (upstream pins `<7`; this package carries a one-line range widening — v7 kept the exact class surface the patch wraps — removed once upstream catches up)
 - **Pure ESM** via `node --import @omnia-voice/tracing/register` (Node 20–24)
@@ -68,7 +68,7 @@ Failed calls (auth errors, timeouts) are captured as ERROR spans and stored as t
 
 ## Privacy
 
-Span **structure** is always stored. Model-call **content** (`gen_ai.*` prompt/completion attributes) is stored only if your Omnia workspace has request logging enabled, under your retention window, with the same scrubbing and size caps as gateway traffic.
+Span **structure** is always stored. Model-call **content** (`gen_ai.*` prompt/completion attributes) is stored only if your errorbar workspace has request logging enabled, under your retention window, with the same scrubbing and size caps as gateway traffic.
 
 ## Verify your setup
 

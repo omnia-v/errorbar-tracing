@@ -1,4 +1,4 @@
-"""Omnia tracing — standard OpenTelemetry, curated.
+"""errorbar tracing — standard OpenTelemetry, curated.
 
 One install, one line; eject anytime, your spans don't change. This package
 contains NO instrumentation code of its own: it pins and configures standard,
@@ -72,7 +72,7 @@ def setup(
     service_name: str | None = None,
     endpoint: str | None = None,
 ) -> Tracing:
-    """Start standard OpenTelemetry tracing, exporting to Omnia.
+    """Start standard OpenTelemetry tracing, exporting to errorbar.
 
     Call ONCE, at startup, before constructing LLM clients. Instruments
     OpenAI, Anthropic, Gemini and LangChain via the ecosystem's standard

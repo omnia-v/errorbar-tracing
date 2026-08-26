@@ -11,7 +11,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
-DEFAULT_ENDPOINT = "https://gateway.omnia-voice.com/v1/traces"
+DEFAULT_ENDPOINT = "https://gateway.errorbar.ai/v1/traces"
 TAG_ATTRIBUTE = "omnia.tag"
 
 __all__ = ["setup", "resolve_config", "ResolvedConfig", "Tracing", "DEFAULT_ENDPOINT", "TAG_ATTRIBUTE"]

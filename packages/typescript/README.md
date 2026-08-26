@@ -40,7 +40,7 @@ Your inference does **not** move: requests keep going to your current provider; 
 | --- | --- | --- |
 | `OMNIA_API_KEY` | errorbar API key — **required**; `setup()` throws rather than exporting nowhere silently | — |
 | `OMNIA_TAG` | Population tag: one tag = one evaluation population in errorbar | unset |
-| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.omnia-voice.com/v1/traces` |
+| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
 All options can also be passed to `setup()` directly; explicit options beat env vars.
@@ -61,7 +61,7 @@ process.env.OTEL_RESOURCE_ATTRIBUTES = "omnia.tag=my-agent";
 new NodeSDK({
   serviceName: "my-service",
   traceExporter: new OTLPTraceExporter({
-    url: "https://gateway.omnia-voice.com/v1/traces",
+    url: "https://gateway.errorbar.ai/v1/traces",
     headers: { Authorization: `Bearer ${process.env.OMNIA_API_KEY}` },
   }),
   instrumentations: [

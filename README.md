@@ -40,7 +40,7 @@ setup()  # reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM client
 | --- | --- | --- |
 | `OMNIA_API_KEY` | errorbar API key (required — setup refuses to start without one) | — |
 | `OMNIA_TAG` | Population tag: one tag = one gradeable population in errorbar | unset |
-| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.omnia-voice.com/v1/traces` |
+| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
 All options can also be passed to `setup()` directly; explicit options beat env vars.

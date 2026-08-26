@@ -8,7 +8,7 @@
  * anytime; your spans do not change.
  */
 
-export const DEFAULT_ENDPOINT = "https://gateway.omnia-voice.com/v1/traces";
+export const DEFAULT_ENDPOINT = "https://gateway.errorbar.ai/v1/traces";
 
 /** Resource attribute that names the traffic population in errorbar. */
 export const TAG_ATTRIBUTE = "omnia.tag";

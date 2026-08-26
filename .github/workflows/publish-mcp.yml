@@ -1,0 +1,34 @@
+name: publish-mcp
+# Publishes @omnia-voice/mcp (repo omnia-v/omnia-mcp) with THIS repo's NPM_TOKEN —
+# the one granular token for the @omnia-voice scope lives here. Manual only:
+# pick the omnia-mcp tag to publish. No --provenance: an attestation must name
+# the source repo, and this workflow doesn't live there.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "omnia-mcp git ref to publish (tag, e.g. v0.1.0)"
+        required: true
+        default: "v0.1.0"
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: omnia-v/omnia-mcp
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: test "v$(node -p 'require("./package.json").version')" = "${{ inputs.ref }}" || { echo "package.json version does not match tag ${{ inputs.ref }}"; exit 1; }
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

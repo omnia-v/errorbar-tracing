@@ -1,12 +1,12 @@
 /**
  * ESM auto-instrumentation entrypoint:
  *
- *   node --import @omnia-voice/tracing/register app.mjs
+ *   node --import @error-bar/tracing/register app.mjs
  *
  * Pure-ESM apps import their LLM clients before any runtime call could patch
  * them, so interception has to happen at the module loader. This registers
  * OpenTelemetry's import-in-the-middle hook FIRST, then starts setup() from
- * env (OMNIA_API_KEY, OMNIA_TAG, OMNIA_OTLP_ENDPOINT, OTEL_SERVICE_NAME).
+ * env (ERRORBAR_API_KEY, ERRORBAR_TAG, ERRORBAR_OTLP_ENDPOINT, OTEL_SERVICE_NAME; the OMNIA_* names still work).
  *
  * CommonJS apps don't need this file — calling setup() before creating
  * clients is enough.

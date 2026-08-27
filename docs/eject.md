@@ -1,6 +1,6 @@
 # Ejecting — the same setup without this package
 
-`@omnia-voice/tracing` / `omnia-tracing` is ~200 lines of configuration over standard
+`@error-bar/tracing` / `errorbar-tracing` is ~200 lines of configuration over standard
 OpenTelemetry. If you'd rather own that configuration (or stop using the
 package for any reason), here is the identical setup in vanilla OTel. Your
 spans do not change — the package and this document produce the same wire
@@ -28,7 +28,7 @@ const sdk = new NodeSDK({
   serviceName: "my-service",
   traceExporter: new OTLPTraceExporter({
     url: "https://gateway.omnia-voice.com/v1/traces",
-    headers: { Authorization: `Bearer ${process.env.OMNIA_API_KEY}` },
+    headers: { Authorization: `Bearer ${process.env.ERRORBAR_API_KEY}` },
   }),
   instrumentations: [
     new OpenAIInstrumentation(),
@@ -62,7 +62,7 @@ provider.add_span_processor(
     BatchSpanProcessor(
         OTLPSpanExporter(
             endpoint="https://gateway.omnia-voice.com/v1/traces",
-            headers={"Authorization": f"Bearer {os.environ['OMNIA_API_KEY']}"},
+            headers={"Authorization": f"Bearer {os.environ['ERRORBAR_API_KEY']}"},
         )
     )
 )
@@ -77,6 +77,6 @@ above and configure the exporter through the standard env contract:
 
 ```bash
 OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://gateway.omnia-voice.com/v1/traces
-OTEL_EXPORTER_OTLP_TRACES_HEADERS="Authorization=Bearer ${OMNIA_API_KEY}"
+OTEL_EXPORTER_OTLP_TRACES_HEADERS="Authorization=Bearer ${ERRORBAR_API_KEY}"
 OTEL_RESOURCE_ATTRIBUTES=omnia.tag=my-agent
 ```

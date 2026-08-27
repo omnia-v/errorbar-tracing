@@ -1,10 +1,10 @@
 import pytest
 
-from omnia_tracing import DEFAULT_ENDPOINT, TAG_ATTRIBUTE, resolve_config
+from errorbar_tracing import DEFAULT_ENDPOINT, TAG_ATTRIBUTE, resolve_config
 
 
 def test_refuses_without_api_key():
-    with pytest.raises(ValueError, match="OMNIA_API_KEY"):
+    with pytest.raises(ValueError, match="ERRORBAR_API_KEY"):
         resolve_config(env={})
 
 
@@ -42,3 +42,19 @@ def test_options_beat_env():
 def test_no_tag_means_no_attribute():
     c = resolve_config(api_key="k", env={})
     assert c.resource_attributes == {}
+
+
+def test_errorbar_env_names_take_precedence_and_omnia_still_works():
+    c = resolve_config(
+        env={
+            "ERRORBAR_API_KEY": "sk_new",
+            "OMNIA_API_KEY": "sk_old",
+            "ERRORBAR_TAG": "new-tag",
+            "ERRORBAR_OTLP_ENDPOINT": "https://new.example/v1/traces",
+        }
+    )
+    assert c.headers["Authorization"] == "Bearer sk_new"
+    assert c.resource_attributes[TAG_ATTRIBUTE] == "new-tag"
+    assert c.endpoint == "https://new.example/v1/traces"
+    legacy = resolve_config(env={"OMNIA_API_KEY": "sk_old"})
+    assert legacy.headers["Authorization"] == "Bearer sk_old"

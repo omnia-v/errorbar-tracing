@@ -50,13 +50,13 @@ jobs:
       # libraries that aren't installed, and pick up ones that are.
       - run: |
           python -c "
-          from omnia_tracing import setup
+          from errorbar_tracing import setup
           t = setup(api_key='ci', endpoint='http://127.0.0.1:9')
           assert t.instrumented == [], t.instrumented
           t.shutdown()"
           pip install anthropic
           python -c "
-          from omnia_tracing import setup
+          from errorbar_tracing import setup
           t = setup(api_key='ci', endpoint='http://127.0.0.1:9')
           assert t.instrumented == ['anthropic'], t.instrumented
           t.shutdown()"

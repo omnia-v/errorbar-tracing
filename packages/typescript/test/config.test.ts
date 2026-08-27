@@ -5,7 +5,7 @@ const ENV = {} as NodeJS.ProcessEnv;
 
 describe("resolveConfig", () => {
   it("refuses to start without an API key — no silent nowhere-exporter", () => {
-    expect(() => resolveConfig({}, ENV)).toThrow(/OMNIA_API_KEY/);
+    expect(() => resolveConfig({}, ENV)).toThrow(/ERRORBAR_API_KEY/);
   });
 
   it("defaults to the errorbar gateway endpoint with a bearer header", () => {
@@ -52,5 +52,26 @@ describe("OpenAIInstrumentationWide", () => {
     const defs = Array.isArray(def) ? def : [def];
     const openai = defs.find((d) => d.name === "openai");
     expect(openai?.supportedVersions).toEqual([">=4 <8"]);
+  });
+});
+
+describe("env names — ERRORBAR_* first, OMNIA_* still honoured", () => {
+  it("reads ERRORBAR_* and prefers it over OMNIA_*", () => {
+    const c = resolveConfig(
+      {},
+      {
+        ERRORBAR_API_KEY: "sk_new",
+        OMNIA_API_KEY: "sk_old",
+        ERRORBAR_TAG: "new-tag",
+        ERRORBAR_OTLP_ENDPOINT: "https://new.example/v1/traces",
+      } as NodeJS.ProcessEnv,
+    );
+    expect(c.headers.Authorization).toBe("Bearer sk_new");
+    expect(c.resourceAttributes[TAG_ATTRIBUTE]).toBe("new-tag");
+    expect(c.endpoint).toBe("https://new.example/v1/traces");
+  });
+  it("still starts from OMNIA_* alone (existing deployments keep working)", () => {
+    const c = resolveConfig({}, { OMNIA_API_KEY: "sk_old" } as NodeJS.ProcessEnv);
+    expect(c.headers.Authorization).toBe("Bearer sk_old");
   });
 });

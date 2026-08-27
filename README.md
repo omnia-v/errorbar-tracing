@@ -1,4 +1,4 @@
-# omnia-tracing
+# errorbar tracing SDKs
 
 **Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you can grade it, calibrate a judge on your own standards, and find out with confidence intervals whether a cheaper model passes them.
 
@@ -7,40 +7,40 @@ This SDK contains **no instrumentation code of its own**. It pins and configures
 ## TypeScript
 
 ```bash
-npm install @omnia-voice/tracing
+npm install @error-bar/tracing
 ```
 
 ```ts
-import { setup } from "@omnia-voice/tracing";
+import { setup } from "@error-bar/tracing";
 
-setup(); // reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM clients
+setup(); // reads ERRORBAR_API_KEY and ERRORBAR_TAG — call before creating LLM clients
 ```
 
 **Pure-ESM app?** Skip the code entirely and start Node with the loader hook — imports are intercepted before your app runs:
 
 ```bash
-node --import @omnia-voice/tracing/register app.mjs
+node --import @error-bar/tracing/register app.mjs
 ```
 
 ## Python
 
 ```bash
-pip install omnia-tracing
+pip install errorbar-tracing
 ```
 
 ```python
-from omnia_tracing import setup
+from errorbar_tracing import setup
 
-setup()  # reads OMNIA_API_KEY and OMNIA_TAG — call before creating LLM clients
+setup()  # reads ERRORBAR_API_KEY and ERRORBAR_TAG — call before creating LLM clients
 ```
 
 ## Configuration
 
 | Env var | Meaning | Default |
 | --- | --- | --- |
-| `OMNIA_API_KEY` | errorbar API key (required — setup refuses to start without one) | — |
-| `OMNIA_TAG` | Population tag: one tag = one gradeable population in errorbar | unset |
-| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
+| `ERRORBAR_API_KEY` | errorbar API key (required — setup refuses to start without one) | — |
+| `ERRORBAR_TAG` | Population tag: one tag = one gradeable population in errorbar | unset |
+| `ERRORBAR_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
 All options can also be passed to `setup()` directly; explicit options beat env vars.
@@ -59,7 +59,7 @@ Only libraries actually installed in your environment are instrumented (Python r
 **Verified end-to-end** (live drills 2026-08-21, every row confirmed gradeable in errorbar):
 
 - TypeScript CJS with `openai@4` **and** `openai@7` (upstream pins `<7`; this package carries a one-line range widening — v7 kept the exact class surface the patch wraps — removed once upstream catches up)
-- **Pure ESM** via `node --import @omnia-voice/tracing/register` (Node 20–24)
+- **Pure ESM** via `node --import @error-bar/tracing/register` (Node 20–24)
 - **Streaming** completions (content aggregated across chunks)
 - **LangChain** (`@langchain/openai` chat model)
 - **Python** with `openai`
@@ -73,7 +73,7 @@ Span **structure** is always stored. Model-call **content** (`gen_ai.*` prompt/c
 ## Verify your setup
 
 ```bash
-OMNIA_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
+ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
 ```
 
 Proves the key works, confirms traces are landing, and names your next step.
@@ -81,3 +81,7 @@ Proves the key works, confirms traces are landing, and names your next step.
 ## License
 
 Apache-2.0
+
+## Renamed from `@omnia-voice/tracing` / `omnia-tracing`
+
+As of 0.2.0 the packages are `@error-bar/tracing` (npm) and `errorbar-tracing` (PyPI). The old names ship one last release (0.2.0) as shims that depend on and re-export the new packages, so nothing breaks — but update your imports; the shims will be removed later. Env vars are `ERRORBAR_*`; the `OMNIA_*` names keep working.

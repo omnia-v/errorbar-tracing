@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "omnia-tracing"
-version = "0.1.3"
+name = "errorbar-tracing"
+version = "0.2.0"
 description = "errorbar tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change."
 license = "Apache-2.0"
 readme = "README.md"
@@ -28,7 +28,7 @@ dev = ["pytest>=8"]
 # Explicit allowlist: hatchling's default packs the project DIR, which once
 # shipped a local .env inside a published sdist. Never again — list what
 # ships; everything else stays home.
-include = ["src/omnia_tracing", "tests", "README.md", "pyproject.toml"]
+include = ["src/errorbar_tracing", "tests", "README.md", "pyproject.toml"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/omnia_tracing"]
+packages = ["src/errorbar_tracing"]

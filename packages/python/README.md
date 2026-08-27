@@ -1,4 +1,4 @@
-# omnia-tracing
+# errorbar-tracing
 
 **Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you grade it, calibrate a judge against your own standards, and find out **with confidence intervals** whether a cheaper model holds up on your production traffic.
 
@@ -7,7 +7,7 @@ This package contains **no instrumentation code of its own**. It pins and config
 ## Install
 
 ```bash
-pip install omnia-tracing
+pip install errorbar-tracing
 ```
 
 ## Use
@@ -15,9 +15,9 @@ pip install omnia-tracing
 Call once at startup, **before constructing any LLM client**:
 
 ```python
-from omnia_tracing import setup
+from errorbar_tracing import setup
 
-tracing = setup()          # reads OMNIA_API_KEY and OMNIA_TAG
+tracing = setup()          # reads ERRORBAR_API_KEY and ERRORBAR_TAG
 print(tracing.instrumented)  # e.g. ['openai', 'anthropic'] — only what's installed
 ```
 
@@ -33,9 +33,9 @@ Your inference does **not** move: requests keep going to your current provider; 
 
 | Env var | Meaning | Default |
 | --- | --- | --- |
-| `OMNIA_API_KEY` | errorbar API key — **required**; `setup()` raises rather than exporting nowhere silently | — |
-| `OMNIA_TAG` | Population tag: one tag = one evaluation population in errorbar | unset |
-| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
+| `ERRORBAR_API_KEY` | errorbar API key — **required**; `setup()` raises rather than exporting nowhere silently | — |
+| `ERRORBAR_TAG` | Population tag: one tag = one evaluation population in errorbar | unset |
+| `ERRORBAR_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
 All options can also be passed to `setup()` directly; explicit options beat env vars.
@@ -59,7 +59,7 @@ provider.add_span_processor(
     BatchSpanProcessor(
         OTLPSpanExporter(
             endpoint="https://gateway.errorbar.ai/v1/traces",
-            headers={"Authorization": f"Bearer {os.environ['OMNIA_API_KEY']}"},
+            headers={"Authorization": f"Bearer {os.environ['ERRORBAR_API_KEY']}"},
         )
     )
 )
@@ -76,7 +76,7 @@ Span **structure** is always stored. Model-call **content** (prompts/completions
 ## Verify your setup — get a receipt, not a hope
 
 ```bash
-OMNIA_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
+ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
 ```
 
 Proves the key works, confirms traces are actually landing, and names your one next step. Instrumentation that fails silently is the industry default; this is the alternative.

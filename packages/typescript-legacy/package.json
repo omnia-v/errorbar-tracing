@@ -1,0 +1,37 @@
+{
+  "name": "@omnia-voice/tracing",
+  "version": "0.2.0",
+  "description": "DEPRECATED \u2014 renamed to @error-bar/tracing. This package re-exports it so existing installs keep working; switch your import.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omnia-v/omnia-tracing.git",
+    "directory": "packages/typescript-legacy"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "register.mjs",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@error-bar/tracing": "^0.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./register": "./register.mjs"
+  }
+}

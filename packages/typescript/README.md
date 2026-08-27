@@ -1,4 +1,4 @@
-# @omnia-voice/tracing
+# @error-bar/tracing
 
 **Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you grade it, calibrate a judge against your own standards, and find out **with confidence intervals** whether a cheaper model holds up on your production traffic.
 
@@ -7,7 +7,7 @@ This SDK contains **no instrumentation code of its own**. It pins and configures
 ## Install
 
 ```bash
-npm install @omnia-voice/tracing
+npm install @error-bar/tracing
 ```
 
 ## Use
@@ -15,15 +15,15 @@ npm install @omnia-voice/tracing
 Call once at startup, **before constructing any LLM client**:
 
 ```ts
-import { setup } from "@omnia-voice/tracing";
+import { setup } from "@error-bar/tracing";
 
-const tracing = setup(); // reads OMNIA_API_KEY and OMNIA_TAG
+const tracing = setup(); // reads ERRORBAR_API_KEY and ERRORBAR_TAG
 ```
 
 Pure-ESM app? Skip the code entirely — start Node with the loader hook so imports are intercepted before your app runs:
 
 ```bash
-node --import @omnia-voice/tracing/register app.mjs
+node --import @error-bar/tracing/register app.mjs
 ```
 
 Short-lived scripts should `await tracing.shutdown()` before exit to flush pending spans; long-running servers can skip it. The `register` entrypoint flushes automatically when the process exits normally — no code needed.
@@ -38,9 +38,9 @@ Your inference does **not** move: requests keep going to your current provider; 
 
 | Env var | Meaning | Default |
 | --- | --- | --- |
-| `OMNIA_API_KEY` | errorbar API key — **required**; `setup()` throws rather than exporting nowhere silently | — |
-| `OMNIA_TAG` | Population tag: one tag = one evaluation population in errorbar | unset |
-| `OMNIA_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
+| `ERRORBAR_API_KEY` | errorbar API key — **required**; `setup()` throws rather than exporting nowhere silently | — |
+| `ERRORBAR_TAG` | Population tag: one tag = one evaluation population in errorbar | unset |
+| `ERRORBAR_OTLP_ENDPOINT` | OTLP/HTTP traces endpoint | `https://gateway.errorbar.ai/v1/traces` |
 | `OTEL_SERVICE_NAME` | Standard OTel service name | unset |
 
 All options can also be passed to `setup()` directly; explicit options beat env vars.
@@ -62,7 +62,7 @@ new NodeSDK({
   serviceName: "my-service",
   traceExporter: new OTLPTraceExporter({
     url: "https://gateway.errorbar.ai/v1/traces",
-    headers: { Authorization: `Bearer ${process.env.OMNIA_API_KEY}` },
+    headers: { Authorization: `Bearer ${process.env.ERRORBAR_API_KEY}` },
   }),
   instrumentations: [
     new OpenAIInstrumentation(),
@@ -81,7 +81,7 @@ Span **structure** is always stored. Model-call **content** (prompts/completions
 ## Verify your setup — get a receipt, not a hope
 
 ```bash
-OMNIA_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
+ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
 ```
 
 Proves the key works, confirms traces are actually landing, and names your one next step. Instrumentation that fails silently is the industry default; this is the alternative.

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "omnia-tracing"
+version = "0.2.0"
+description = "DEPRECATED — renamed to errorbar-tracing. Depends on it and re-exports it so existing installs keep working; switch your import."
+license = "Apache-2.0"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["errorbar-tracing>=0.2.0"]
+
+[project.urls]
+Repository = "https://github.com/omnia-v/omnia-tracing"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/omnia_tracing", "README.md", "pyproject.toml"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/omnia_tracing"]

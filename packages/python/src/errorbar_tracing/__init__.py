@@ -34,18 +34,21 @@ def resolve_config(
 ) -> ResolvedConfig:
     """Pure configuration assembly — unit-testable without starting a pipeline."""
     e = os.environ if env is None else env
-    key = api_key or e.get("OMNIA_API_KEY")
+    key = api_key or e.get("ERRORBAR_API_KEY") or e.get("OMNIA_API_KEY")
     if not key:
         raise ValueError(
-            "omnia-tracing: no API key. Pass setup(api_key=...) or set OMNIA_API_KEY. "
+            "errorbar-tracing: no API key. Pass setup(api_key=...) or set ERRORBAR_API_KEY (OMNIA_API_KEY still works). "
             "Refusing to start a tracer that exports nowhere."
         )
     resource_attributes: dict[str, str] = {}
-    resolved_tag = tag or e.get("OMNIA_TAG")
+    resolved_tag = tag or e.get("ERRORBAR_TAG") or e.get("OMNIA_TAG")
     if resolved_tag:
         resource_attributes[TAG_ATTRIBUTE] = resolved_tag
     return ResolvedConfig(
-        endpoint=endpoint or e.get("OMNIA_OTLP_ENDPOINT") or DEFAULT_ENDPOINT,
+        endpoint=endpoint
+        or e.get("ERRORBAR_OTLP_ENDPOINT")
+        or e.get("OMNIA_OTLP_ENDPOINT")
+        or DEFAULT_ENDPOINT,
         headers={"Authorization": f"Bearer {key}"},
         service_name=service_name or e.get("OTEL_SERVICE_NAME"),
         resource_attributes=resource_attributes,
@@ -80,7 +83,7 @@ def setup(
     """
     config = resolve_config(api_key, tag, service_name, endpoint)
 
-    # Imports live here, not module top: `import omnia_tracing` must stay
+    # Imports live here, not module top: `import errorbar_tracing` must stay
     # side-effect free so resolve_config is usable (and testable) alone.
     from opentelemetry.sdk.resources import Resource
     from opentelemetry.sdk.trace import TracerProvider

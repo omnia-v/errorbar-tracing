@@ -1,14 +1,20 @@
 name: publish
-# Release = push a tag:  js-v0.1.0  publishes @omnia-voice/tracing to npm,
-#                        py-v0.1.0  publishes omnia-tracing to PyPI.
+# Release = push a tag:  js-v0.2.0  publishes @error-bar/tracing to npm,
+#                        py-v0.2.0  publishes errorbar-tracing to PyPI.
+#                        js-legacy-v* / py-legacy-v* publish the deprecation shims
+#                        under the old names (after the release they point at).
 # npm needs the NPM_TOKEN secret (granular token for the @omnia-voice scope);
 # PyPI uses trusted publishing (configure this repo as a publisher for the
-# omnia-tracing project on pypi.org — no token stored here).
+# errorbar-tracing AND omnia-tracing projects on pypi.org — no token here).
 on:
   push:
     tags:
       - "js-v*"
       - "py-v*"
+      # Deprecation shims under the OLD names (@omnia-voice/tracing,
+      # omnia-tracing): tag AFTER the js-v* / py-v* release they point at.
+      - "js-legacy-v*"
+      - "py-legacy-v*"
 
 jobs:
   npm:
@@ -56,3 +62,42 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: packages/python/dist
+  npm-legacy:
+    if: startsWith(github.ref_name, 'js-legacy-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: packages/typescript-legacy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install
+      - run: npm run build
+      - run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_LEGACY || secrets.NPM_TOKEN }}
+  pypi-legacy:
+    if: startsWith(github.ref_name, 'py-legacy-v')
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: packages/python-legacy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build && python -m build
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: packages/python-legacy/dist

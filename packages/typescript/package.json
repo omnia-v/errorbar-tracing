@@ -1,11 +1,29 @@
 {
   "name": "@error-bar/tracing",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "errorbar tracing \u2014 standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change.",
+  "keywords": [
+    "opentelemetry",
+    "otel",
+    "tracing",
+    "llm",
+    "llm-evaluation",
+    "llm-as-a-judge",
+    "openai",
+    "anthropic",
+    "langchain",
+    "gemini",
+    "observability",
+    "errorbar"
+  ],
+  "homepage": "https://docs.errorbar.ai/sdks/typescript",
+  "bugs": {
+    "url": "https://github.com/omnia-v/errorbar-tracing/issues"
+  },
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/omnia-v/omnia-tracing.git",
+    "url": "git+https://github.com/omnia-v/errorbar-tracing.git",
     "directory": "packages/typescript"
   },
   "main": "dist/index.js",

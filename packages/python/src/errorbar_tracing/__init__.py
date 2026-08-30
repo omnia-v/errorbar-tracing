@@ -12,7 +12,9 @@ import os
 from dataclasses import dataclass, field
 
 DEFAULT_ENDPOINT = "https://gateway.errorbar.ai/v1/traces"
-TAG_ATTRIBUTE = "omnia.tag"
+# `errorbar.tag` since 0.3.0; the ingest still reads the pre-rename `omnia.tag`
+# that 0.2.x emitted, so a mixed fleet keeps landing in one population.
+TAG_ATTRIBUTE = "errorbar.tag"
 
 __all__ = ["setup", "resolve_config", "ResolvedConfig", "Tracing", "DEFAULT_ENDPOINT", "TAG_ATTRIBUTE"]
 

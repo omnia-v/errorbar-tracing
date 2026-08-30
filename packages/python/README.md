@@ -1,6 +1,6 @@
 # errorbar-tracing
 
-**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you grade it, calibrate a judge against your own standards, and find out **with confidence intervals** whether a cheaper model holds up on your production traffic.
+**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://www.errorbar.ai) — where you grade it, calibrate a judge against your own standards, and find out **with confidence intervals** whether a cheaper model holds up on your production traffic.
 
 This package contains **no instrumentation code of its own**. It pins and configures the ecosystem's standard OpenTelemetry instrumentations — which gives it a property no other tracing SDK offers: **you can uninstall it without losing your instrumentation.** The identical setup in vanilla OTel is documented below; your spans are byte-for-byte the same either way, and nothing proprietary ever goes on the wire.
 
@@ -53,7 +53,7 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 from opentelemetry.instrumentation.anthropic import AnthropicInstrumentor
 
 provider = TracerProvider(
-    resource=Resource.create({"service.name": "my-service", "omnia.tag": "my-agent"})
+    resource=Resource.create({"service.name": "my-service", "errorbar.tag": "my-agent"})
 )
 provider.add_span_processor(
     BatchSpanProcessor(
@@ -67,7 +67,7 @@ AnthropicInstrumentor().instrument(tracer_provider=provider)
 # ...and the other instrumentors for whichever libraries you use
 ```
 
-Already emitting OpenTelemetry (Pydantic AI, an existing OTel setup)? You don't need this package at all — three env vars point your existing exporter at errorbar. See the [OTLP ingest reference](https://docs.omnia-voice.com/reference/otlp-ingest).
+Already emitting OpenTelemetry (Pydantic AI, an existing OTel setup)? You don't need this package at all — three env vars point your existing exporter at errorbar. See the [OTLP ingest reference](https://docs.errorbar.ai/reference/otlp-ingest).
 
 ## Privacy
 
@@ -76,13 +76,13 @@ Span **structure** is always stored. Model-call **content** (prompts/completions
 ## Verify your setup — get a receipt, not a hope
 
 ```bash
-ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
+ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://www.errorbar.ai/setup.sh)"
 ```
 
 Proves the key works, confirms traces are actually landing, and names your one next step. Instrumentation that fails silently is the industry default; this is the alternative.
 
 ## Links
 
-- [Docs](https://docs.omnia-voice.com/reference/tracing-sdk) · [Platform](https://platform.omnia-voice.com) · [Node package](https://www.npmjs.com/package/@omnia-voice/tracing)
+- [Docs](https://docs.errorbar.ai/sdks/python) · [Platform](https://www.errorbar.ai) · [Node package](https://www.npmjs.com/package/@error-bar/tracing)
 
 Apache-2.0

@@ -3,6 +3,13 @@ import pytest
 from errorbar_tracing import DEFAULT_ENDPOINT, TAG_ATTRIBUTE, resolve_config
 
 
+def test_population_attribute_is_errorbar_tag():
+    # The wire name the docs promise; the ingest still reads omnia.tag from 0.2.x.
+    assert TAG_ATTRIBUTE == "errorbar.tag"
+    c = resolve_config(api_key="k", tag="checkout", env={})
+    assert c.resource_attributes == {"errorbar.tag": "checkout"}
+
+
 def test_refuses_without_api_key():
     with pytest.raises(ValueError, match="ERRORBAR_API_KEY"):
         resolve_config(env={})

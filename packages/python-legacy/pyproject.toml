@@ -12,7 +12,7 @@ requires-python = ">=3.10"
 dependencies = ["errorbar-tracing>=0.2.0"]
 
 [project.urls]
-Repository = "https://github.com/omnia-v/omnia-tracing"
+Repository = "https://github.com/omnia-v/errorbar-tracing"
 
 [tool.hatch.build.targets.sdist]
 include = ["src/omnia_tracing", "README.md", "pyproject.toml"]

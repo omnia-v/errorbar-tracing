@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "errorbar-tracing"
-version = "0.2.0"
+version = "0.3.0"
 description = "errorbar tracing — standard OpenTelemetry, curated. One install, one line; eject anytime, your spans don't change."
 license = "Apache-2.0"
 readme = "README.md"

@@ -21,13 +21,13 @@ import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { LangChainInstrumentation } from "@traceloop/instrumentation-langchain";
 
-// omnia.tag names your traffic population in errorbar
-process.env.OTEL_RESOURCE_ATTRIBUTES = "omnia.tag=my-agent";
+// errorbar.tag names your traffic population in errorbar
+process.env.OTEL_RESOURCE_ATTRIBUTES = "errorbar.tag=my-agent";
 
 const sdk = new NodeSDK({
   serviceName: "my-service",
   traceExporter: new OTLPTraceExporter({
-    url: "https://gateway.omnia-voice.com/v1/traces",
+    url: "https://gateway.errorbar.ai/v1/traces",
     headers: { Authorization: `Bearer ${process.env.ERRORBAR_API_KEY}` },
   }),
   instrumentations: [
@@ -56,12 +56,12 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 from opentelemetry.instrumentation.anthropic import AnthropicInstrumentor
 
 provider = TracerProvider(
-    resource=Resource.create({"service.name": "my-service", "omnia.tag": "my-agent"})
+    resource=Resource.create({"service.name": "my-service", "errorbar.tag": "my-agent"})
 )
 provider.add_span_processor(
     BatchSpanProcessor(
         OTLPSpanExporter(
-            endpoint="https://gateway.omnia-voice.com/v1/traces",
+            endpoint="https://gateway.errorbar.ai/v1/traces",
             headers={"Authorization": f"Bearer {os.environ['ERRORBAR_API_KEY']}"},
         )
     )
@@ -76,7 +76,7 @@ If your app already initializes OpenTelemetry some other way, skip everything
 above and configure the exporter through the standard env contract:
 
 ```bash
-OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://gateway.omnia-voice.com/v1/traces
+OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=https://gateway.errorbar.ai/v1/traces
 OTEL_EXPORTER_OTLP_TRACES_HEADERS="Authorization=Bearer ${ERRORBAR_API_KEY}"
-OTEL_RESOURCE_ATTRIBUTES=omnia.tag=my-agent
+OTEL_RESOURCE_ATTRIBUTES=errorbar.tag=my-agent
 ```

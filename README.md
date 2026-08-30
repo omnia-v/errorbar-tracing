@@ -1,8 +1,8 @@
 # errorbar tracing SDKs
 
-**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://platform.omnia-voice.com) — where you can grade it, calibrate a judge on your own standards, and find out with confidence intervals whether a cheaper model passes them.
+**Standard OpenTelemetry, curated.** One install, one line, and your LLM traffic streams to [errorbar](https://www.errorbar.ai) — where you can grade it, calibrate a judge on your own standards, and find out with confidence intervals whether a cheaper model passes them.
 
-This SDK contains **no instrumentation code of its own**. It pins and configures the ecosystem's standard OpenTelemetry instrumentations. That has a consequence no other tracing SDK offers: **you can uninstall it without losing your instrumentation** — the same setup in vanilla OTel is documented in [docs/eject.md](docs/eject.md), and your spans are identical either way. Nothing Omnia-specific ever goes on the wire.
+This SDK contains **no instrumentation code of its own**. It pins and configures the ecosystem's standard OpenTelemetry instrumentations. That has a consequence no other tracing SDK offers: **you can uninstall it without losing your instrumentation** — the same setup in vanilla OTel is documented in [docs/eject.md](docs/eject.md), and your spans are identical either way. Nothing errorbar-specific ever goes on the wire.
 
 ## TypeScript
 
@@ -64,7 +64,7 @@ Only libraries actually installed in your environment are instrumented (Python r
 - **LangChain** (`@langchain/openai` chat model)
 - **Python** with `openai`
 
-Failed calls (auth errors, timeouts) are captured as ERROR spans and stored as trace structure — a fix this drill battery surfaced in the ingest itself. The weekly unpinned-upstream CI canary re-checks all of the above so nothing rots silently. Already emitting OpenTelemetry from a framework like the Vercel AI SDK? You don't need this package at all — point your existing exporter at the endpoint above with an `Authorization: Bearer` header and an `omnia.tag` resource attribute.
+Failed calls (auth errors, timeouts) are captured as ERROR spans and stored as trace structure — a fix this drill battery surfaced in the ingest itself. The weekly unpinned-upstream CI canary re-checks all of the above so nothing rots silently. Already emitting OpenTelemetry from a framework like the Vercel AI SDK? You don't need this package at all — point your existing exporter at the endpoint above with an `Authorization: Bearer` header and an `errorbar.tag` resource attribute.
 
 ## Privacy
 
@@ -73,10 +73,14 @@ Span **structure** is always stored. Model-call **content** (`gen_ai.*` prompt/c
 ## Verify your setup
 
 ```bash
-ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://platform.omnia-voice.com/setup.sh)"
+ERRORBAR_API_KEY=sk_... sh -c "$(curl -fsSL https://www.errorbar.ai/setup.sh)"
 ```
 
 Proves the key works, confirms traces are landing, and names your next step.
+
+## Docs
+
+[docs.errorbar.ai/sdks/overview](https://docs.errorbar.ai/sdks/overview) · [TypeScript](https://docs.errorbar.ai/sdks/typescript) · [Python](https://docs.errorbar.ai/sdks/python) · [OTLP ingest](https://docs.errorbar.ai/reference/otlp-ingest)
 
 ## License
 
@@ -85,3 +89,5 @@ Apache-2.0
 ## Renamed from `@omnia-voice/tracing` / `omnia-tracing`
 
 As of 0.2.0 the packages are `@error-bar/tracing` (npm) and `errorbar-tracing` (PyPI). The old names ship one last release (0.2.0) as shims that depend on and re-export the new packages, so nothing breaks — but update your imports; the shims will be removed later. Env vars are `ERRORBAR_*`; the `OMNIA_*` names keep working.
+
+As of 0.3.0 the population tag rides the `errorbar.tag` resource attribute (0.2.x emitted `omnia.tag`). The ingest reads both, so a fleet mid-upgrade still lands in one population.

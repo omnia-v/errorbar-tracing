@@ -10,21 +10,23 @@
 
 export const DEFAULT_ENDPOINT = "https://gateway.errorbar.ai/v1/traces";
 
-/** Resource attribute that names the traffic population in errorbar. */
-export const TAG_ATTRIBUTE = "omnia.tag";
+/** Resource attribute that names the traffic population in errorbar.
+ *  `errorbar.tag` since 0.3.0; the ingest still reads the pre-rename
+ *  `omnia.tag` that 0.2.x emitted, so mixed fleets keep one population. */
+export const TAG_ATTRIBUTE = "errorbar.tag";
 
 export interface SetupOptions {
   /** errorbar API key. Default: ERRORBAR_API_KEY env var (OMNIA_API_KEY still honoured). Required — setup throws
    *  rather than exporting nowhere silently. */
   apiKey?: string;
-  /** Population tag (becomes the `omnia.tag` resource attribute — one tag =
+  /** Population tag (becomes the `errorbar.tag` resource attribute — one tag =
    *  one gradeable population). Default: ERRORBAR_TAG env var (OMNIA_TAG still honoured). */
   tag?: string;
   /** Service name on the resource. Default: OTEL_SERVICE_NAME env var. */
   serviceName?: string;
   /** OTLP/HTTP traces endpoint. Default: ERRORBAR_OTLP_ENDPOINT env var (OMNIA_OTLP_ENDPOINT still honoured), else
    *  the errorbar gateway. Point it elsewhere and this package exports to any
-   *  OTLP receiver — there is nothing Omnia-specific on the wire. */
+   *  OTLP receiver — there is nothing errorbar-specific on the wire. */
   endpoint?: string;
 }
 

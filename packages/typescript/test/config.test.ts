@@ -4,6 +4,12 @@ import { resolveConfig, DEFAULT_ENDPOINT, TAG_ATTRIBUTE } from "../src/config";
 const ENV = {} as NodeJS.ProcessEnv;
 
 describe("resolveConfig", () => {
+  it("names the population with the errorbar.tag resource attribute (the wire name the docs promise)", () => {
+    expect(TAG_ATTRIBUTE).toBe("errorbar.tag");
+    const c = resolveConfig({ apiKey: "k", tag: "checkout" }, ENV);
+    expect(c.resourceAttributes).toEqual({ "errorbar.tag": "checkout" });
+  });
+
   it("refuses to start without an API key — no silent nowhere-exporter", () => {
     expect(() => resolveConfig({}, ENV)).toThrow(/ERRORBAR_API_KEY/);
   });
